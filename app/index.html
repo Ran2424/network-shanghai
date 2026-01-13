@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>上海市路网最短路径</title>
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+  />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+    <aside class="panel">
+      <h1>上海市路网最短路径</h1>
+      <p class="desc">在地图上依次点击起点与终点，计算距离最短与时间最短两条路线。</p>
+
+      <div class="status" id="status">加载路网中，请稍候…</div>
+
+      <div class="inputs">
+        <div class="field">
+          <div class="label">起点</div>
+          <div class="value" id="startPoint">未选择</div>
+        </div>
+        <div class="field">
+          <div class="label">终点</div>
+          <div class="value" id="endPoint">未选择</div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="clearBtn" disabled>清除选择</button>
+      </div>
+
+      <div class="results">
+        <div class="result">
+          <div class="label">距离最短</div>
+          <div class="value" id="distanceResult">-</div>
+        </div>
+        <div class="result">
+          <div class="label">时间最短</div>
+          <div class="value" id="timeResult">-</div>
+        </div>
+      </div>
+
+      <div class="legend">
+        <div class="legend-item">
+          <span class="swatch swatch-distance"></span>
+          <span>距离最短路径</span>
+        </div>
+        <div class="legend-item">
+          <span class="swatch swatch-time"></span>
+          <span>时间最短路径</span>
+        </div>
+      </div>
+    </aside>
+    <main id="map"></main>
+  </div>
+
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+  ></script>
+  <script src="app.js"></script>
+</body>
+</html>

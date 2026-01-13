@@ -1,0 +1,17 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;700&family=Source+Sans+3:wght@400;600&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    font-family: "Source Sans 3", "Noto Serif SC", sans-serif;
+    color: #0f172a;
+    background: radial-gradient(circle at top left, #fef3c7, #f7f7f2 45%, #e2e8f0 100%);
+  }
+}
+
+.leaflet-container {
+  font-family: "Source Sans 3", sans-serif;
+}

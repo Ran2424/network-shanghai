@@ -1,1 +1,14 @@
-.vscode/
+# Node
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# Build
+dist/
+build/
+.next/
+.out/
+
+# Env
+.env
+.env.local

@@ -7,19 +7,37 @@
 ### 启动方式
 
 ```bash
-cd backend
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-uvicorn main:app --reload
+uvicorn backend.main:app --reload
 ```
 
 默认监听 `http://localhost:8000`。
 
+### 目录结构（后端）
+
+```
+backend/
+  app/
+    api.py          # FastAPI 应用入口与路由
+    schemas.py      # Pydantic 请求/响应模型
+  network/
+    geo.py          # 通用地理工具（haversine、GeoJSON 读取）
+    road.py         # 路网构建与最短路
+    transit.py      # 公交换乘网络与线路几何处理
+  config.py         # 数据路径配置
+  main.py           # 兼容入口：导出 app
+  graph.py          # 兼容入口：RoadGraph / load_geojson
+  transit.py        # 兼容入口：TransitGraph
+  data/             # 线网与公交数据
+```
+
 ### 主要功能
 
-- 启动时加载 `data/shanghai_roads.geojson`，构建路网图结构（节点、边、距离与时间权重）。
-- 根据传入的起点、终点坐标，计算距离最短与时间最短路径。
+- 启动时加载 `backend/data/shanghai_roads.geojson`，构建路网图结构（节点、边、距离与时间权重）。
+- 启动时加载 `backend/data/上海市公交_点.shp` 与 `backend/data/上海市公交线路.shp`，构建公交网络与线路几何。
+- 根据传入的起点、终点坐标，计算开车与公交出行的路径。
 
 ### 路网建立的思路与流程
 
@@ -37,7 +55,7 @@ uvicorn main:app --reload
 
 - `GET /health`：健康检查，返回节点数量。
 - `GET /roads`：返回路网 GeoJSON 数据。
-- `POST /route`：计算距离/时间最短路径。
+- `POST /route`：计算开车或公交路径（`mode=car|transit`）。
 
 请求示例：
 ```json
@@ -50,13 +68,23 @@ uvicorn main:app --reload
 返回示例：
 ```json
 {
-  "distance": {
-    "cost": 1234.56,
-    "path": [[31.2304, 121.4737], [31.229, 121.47]]
-  },
-  "time": {
-    "cost": 321.0,
-    "path": [[31.2304, 121.4737], [31.231, 121.471]]
+  "mode": "transit",
+  "route": {
+    "distance_m": 1234.56,
+    "time_s": 321.0,
+    "path": [[31.2304, 121.4737], [31.229, 121.47]],
+    "geo_path": [[31.2304, 121.4737], [31.229, 121.47]],
+    "segments": [
+      {
+        "type": "bus",
+        "distance_m": 800.0,
+        "time_s": 240.0,
+        "path": [[31.2304, 121.4737], [31.229, 121.47]],
+        "line_name": "浦东59路"
+      }
+    ],
+    "transfers": [],
+    "stop_path": ["宣夏路宣兰路", "大川公路拱乐路"]
   }
 }
 ```
@@ -86,3 +114,12 @@ npm run dev
 - 路网可视化。
 - 地图点击选点。
 - 距离最短路径与时间最短路径计算与展示。
+
+# TODO
+
+- 修复 transit 线路几何匹配与展示一致性（站点名匹配、方向一致、缺失线形的 fallback）。
+- 为 `backend/network/transit.py` 增加数据校验与日志（字段缺失、空几何、坐标异常）。
+- 前端展示优化：公交线路分段渲染（公交/地铁/步行颜色区分）+ 换乘点标注说明。
+- 配置化参数：速度、换乘惩罚、搜索半径移到 `backend/config.py`。
+- 补充 README：数据字段约定、运行示例、FAQ（常见异常与排查）。
+- 增加基础测试：haversine、最短路、shp 读取与线路匹配。

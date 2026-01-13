@@ -4,7 +4,24 @@ from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from ..config import ROADS_PATH, PT_STOPS_SHP, PT_LINES_SHP
+from ..config import (
+    ROADS_PATH,
+    PT_LINES_SHP,
+    PT_STOPS_SHP,
+    ROAD_GRID_CELL_DEG,
+    TRANSIT_BUS_SPEED_KMH,
+    TRANSIT_BUS_TRANSFER_WAIT_S,
+    TRANSIT_BUS_WAIT_S,
+    TRANSIT_GRID_CELL_DEG,
+    TRANSIT_INTERMODAL_PENALTY_S,
+    TRANSIT_MAX_ACCESS_M,
+    TRANSIT_MAX_TRANSFER_M,
+    TRANSIT_SUBWAY_SPEED_KMH,
+    TRANSIT_SUBWAY_TRANSFER_WAIT_S,
+    TRANSIT_SUBWAY_WAIT_S,
+    TRANSIT_TRANSFER_PENALTY_S,
+    TRANSIT_WALK_SPEED_KMH,
+)
 from ..network.geo import haversine_meters, load_geojson
 from ..network.road import RoadGraph
 from ..network.transit import TransitGraph
@@ -32,8 +49,21 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-road_graph = RoadGraph()
-transit_graph = TransitGraph()
+road_graph = RoadGraph(cell_size=ROAD_GRID_CELL_DEG)
+transit_graph = TransitGraph(
+    walk_speed_kmh=TRANSIT_WALK_SPEED_KMH,
+    max_access_m=TRANSIT_MAX_ACCESS_M,
+    max_transfer_m=TRANSIT_MAX_TRANSFER_M,
+    transfer_penalty_s=TRANSIT_TRANSFER_PENALTY_S,
+    bus_speed_kmh=TRANSIT_BUS_SPEED_KMH,
+    subway_speed_kmh=TRANSIT_SUBWAY_SPEED_KMH,
+    bus_wait_s=TRANSIT_BUS_WAIT_S,
+    subway_wait_s=TRANSIT_SUBWAY_WAIT_S,
+    grid_cell_deg=TRANSIT_GRID_CELL_DEG,
+    subway_transfer_wait_s=TRANSIT_SUBWAY_TRANSFER_WAIT_S,
+    bus_transfer_wait_s=TRANSIT_BUS_TRANSFER_WAIT_S,
+    intermodal_penalty_s=TRANSIT_INTERMODAL_PENALTY_S,
+)
 network_geojson: Optional[dict] = None
 
 

@@ -2,6 +2,7 @@ import math
 from dataclasses import dataclass
 from typing import Dict, List, Optional, Tuple
 
+from ..config import ROAD_FALLBACK_SPEED_KMH, ROAD_SPEED_BY_CLASS_KMH
 from .geo import haversine_meters
 
 
@@ -132,7 +133,7 @@ class RoadGraph:
     def path_metrics(self, path: List[int]) -> Tuple[float, float]:
         total_distance = 0.0
         total_time = 0.0
-        fallback_speed = 30.0
+        fallback_speed = ROAD_FALLBACK_SPEED_KMH
         for idx in range(len(path) - 1):
             from_id = path[idx]
             to_id = path[idx + 1]
@@ -153,37 +154,8 @@ class RoadGraph:
         return total_distance, total_time
 
 
-SPEED_BY_CLASS = {
-    # 高等级快速通行道路
-    "motorway": 65,        # 城市高架 / 快速路平均
-    "motorway_link": 45,
-
-    "trunk": 55,           # 城市主干快速路
-    "trunk_link": 40,
-
-    # 主干 / 次干
-    "primary": 45,
-    "primary_link": 35,
-
-    "secondary": 35,
-    "secondary_link": 30,
-
-    # 支路
-    "tertiary": 28,
-    "tertiary_link": 25,
-
-    # 居住 / 内部道路
-    "residential": 22,
-    "unclassified": 20,
-    "living_street": 12,
-
-    # 服务 / 内部
-    "service": 15,
-}
-
-
 def speed_for_feature(props: dict) -> float:
-    return SPEED_BY_CLASS.get(props.get("fclass"), 30)
+    return ROAD_SPEED_BY_CLASS_KMH.get(props.get("fclass"), ROAD_FALLBACK_SPEED_KMH)
 
 
 def is_oneway(value) -> bool:

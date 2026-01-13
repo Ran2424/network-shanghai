@@ -33,6 +33,27 @@ backend/
   data/             # 线网与公交数据
 ```
 
+### 主要配置（backend/config.py）
+
+- `ROADS_PATH`：道路 GeoJSON 数据路径。
+- `PT_STOPS_SHP`：公交站点 shp 数据路径。
+- `PT_LINES_SHP`：公交线路 shp 数据路径。
+- `ROAD_GRID_CELL_DEG`：路网最近节点搜索的网格尺寸（度）。
+- `ROAD_SPEED_BY_CLASS_KMH`：道路等级对应的默认车速（km/h）。
+- `ROAD_FALLBACK_SPEED_KMH`：道路等级缺失时的默认车速（km/h）。
+- `TRANSIT_WALK_SPEED_KMH`：步行速度（km/h）。
+- `TRANSIT_MAX_ACCESS_M`：起终点到站点的最大步行距离（m）。
+- `TRANSIT_MAX_TRANSFER_M`：站点间换乘最大步行距离（m）。
+- `TRANSIT_TRANSFER_PENALTY_S`：换乘基础惩罚（s）。
+- `TRANSIT_GRID_CELL_DEG`：公交站点搜索网格尺寸（度）。
+- `TRANSIT_BUS_SPEED_KMH`：公交车速（km/h）。
+- `TRANSIT_BUS_WAIT_S`：公交等车期望时间（s）。
+- `TRANSIT_BUS_TRANSFER_WAIT_S`：公交换乘等车期望时间（s）。
+- `TRANSIT_SUBWAY_SPEED_KMH`：地铁车速（km/h）。
+- `TRANSIT_SUBWAY_WAIT_S`：地铁等车期望时间（s）。
+- `TRANSIT_SUBWAY_TRANSFER_WAIT_S`：地铁换乘等车期望时间（s）。
+- `TRANSIT_INTERMODAL_PENALTY_S`：公交/地铁跨模式换乘惩罚（s）。
+
 ### 主要功能
 
 - 启动时加载 `backend/data/shanghai_roads.geojson`，构建路网图结构（节点、边、距离与时间权重）。

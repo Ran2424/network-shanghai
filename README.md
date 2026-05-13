@@ -2,6 +2,10 @@
 
 该项目将前后端分离：后端使用 FastAPI 负责路网建模与路径计算，前端使用 React + Leaflet 负责地图渲染与交互。
 
+## 效果展示
+
+![项目效果展示](assets/images/readme-demo.png)
+
 ## 后端（FastAPI）
 
 ### 启动方式
